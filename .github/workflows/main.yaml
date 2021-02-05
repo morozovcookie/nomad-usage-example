@@ -30,8 +30,8 @@ jobs:
       id: docker_login
       uses: docker/login-action@v1
       with:
-        registry: docker.pkg.github.com
-        username: ${{ github.repository_owner }}
+        registry: ghcr.io
+        username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build HTTP Server
       id: build_http_server
@@ -40,7 +40,7 @@ jobs:
         context: .
         push: true
         file: scripts/docker/Dockerfile.http-server
-        tags: docker.pkg.github.com/morozovcookie/nomad-usage-example/http-server:${{ github.sha }}
+        tags: ghcr.io/morozovcookie/nomad-usage-example/http-server:${{ github.sha }}
     - name: Build gRPC Server
       id: build_grpc_server
       uses: docker/build-push-action@v2
@@ -48,4 +48,4 @@ jobs:
         context: .
         push: true
         file: scripts/docker/Dockerfile.grpc-server
-        tags: docker.pkg.github.com/morozovcookie/nomad-usage-example/grpc-server:${{ github.sha }}
+        tags: ghcr.io/morozovcookie/nomad-usage-example/grpc-server:${{ github.sha }}

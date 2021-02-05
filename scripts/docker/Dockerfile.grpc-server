@@ -20,6 +20,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
 #gcr.io/distroless/static:latest
 FROM gcr.io/distroless/static@sha256:04c5f0473b7ebba65bfdd4125fe81fac1701783549f9b98fd96e3566f6035fa7
 
+LABEL org.opencontainers.image.source https://github.com/morozovcookie/nomad-usage-example
+
 COPY --from=0 /src/out/grpc-server /usr/bin/
 
 CMD ["grpc-server"]
