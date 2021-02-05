@@ -20,7 +20,11 @@ jobs:
     - name: Checkout
       id: checkout
       uses: actions/checkout@v2
-    - name: Setup Buildx
+    - name: Set Up QEMU
+      id: set_up_qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Set Up Buildx
+      id: set_up_buildx
       uses: docker/setup-buildx-action@v1
     - name: Login to GitHub Packages Docker Registry
       id: docker_login
@@ -36,6 +40,7 @@ jobs:
         context: .
         push: true
         file: scripts/docker/Dockerfile.http-server
+        tag: docker.pkg.github.com/morozovcookie/nomad-usage-example/http-server:${{ github.sha }}
     - name: Build gRPC Server
       id: build_grpc_server
       uses: docker/build-push-action@v2
@@ -43,3 +48,4 @@ jobs:
         context: .
         push: true
         file: scripts/docker/Dockerfile.grpc-server
+        tag: docker.pkg.github.com/morozovcookie/nomad-usage-example/grpc-server:${{ github.sha }}
