@@ -32,7 +32,7 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.PAT }}
     - name: Build HTTP Server
       id: build_http_server
       uses: docker/build-push-action@v2
