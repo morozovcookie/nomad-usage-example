@@ -33,7 +33,9 @@ func main() {
 
 	srv := grpc.NewServer(cfg.GRPCServerConfig.Address,
 		logger.With(zap.String("appname", appname)))
-	healthV1.RegisterHealthServer(srv, health.NewServer())
+
+	healthSrv := health.NewServer()
+	healthV1.RegisterHealthServer(srv, healthSrv)
 
 	logger.Info("starting application")
 
@@ -62,6 +64,8 @@ func main() {
 	}
 
 	logger.Info("stopping application")
+
+	healthSrv.Shutdown()
 
 	srv.Close()
 
