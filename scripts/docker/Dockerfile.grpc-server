@@ -1,0 +1,25 @@
+# golang:1.15.7-alpine3.13
+FROM golang@sha256:18100456495c42bcdccab3411d8cfd56f3fdaa8527dd2b5a83800f96c7074a41
+
+WORKDIR /src
+
+ADD ./go.mod ./go.sum ./
+
+RUN go mod download
+
+ADD ./cmd/grpcserver ./cmd/grpcserver
+ADD ./grpc ./grpc
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags "-s -w" \
+    -o ./out/grpc-server \
+    ./cmd/grpcserver
+
+# ---
+
+#gcr.io/distroless/static:latest
+FROM gcr.io/distroless/static@sha256:04c5f0473b7ebba65bfdd4125fe81fac1701783549f9b98fd96e3566f6035fa7
+
+COPY --from=0 /src/out/grpc-server /usr/bin/
+
+CMD ["grpc-server"]
