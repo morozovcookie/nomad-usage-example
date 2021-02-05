@@ -39,8 +39,7 @@ func main() {
 	var opts []http.ServerOption
 	opts = initServerHandlers(opts, logger)
 
-	srv := http.NewServer(
-		cfg.HTTPServerConfig.Address,
+	srv := http.NewServer(cfg.HTTPServerConfig.Address,
 		logger.With(zap.String("component", "http_server")),
 		opts...)
 
